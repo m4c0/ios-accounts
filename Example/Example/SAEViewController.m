@@ -32,7 +32,9 @@
         self.login.hidden = YES;
         self.logout.hidden = NO;
     } failure:^(NSError *error) {
-        self.label.text = [error description];
+        if (![error.domain isEqualToString:SACStoreErrorDomain]) {
+            self.label.text = [error description];
+        }
         self.label.hidden = NO;
         self.login.hidden = NO;
         self.logout.hidden = YES;

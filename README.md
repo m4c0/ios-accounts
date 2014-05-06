@@ -5,7 +5,20 @@
 
 ## Usage
 
-To run the example project; clone the repo, and run `pod install` from the Example directory first.
+    #import <SACFacebookAccountRequest.h>
+
+    ...
+    
+    SACFacebookAccountRequest * request = [SACFacebookAccountRequest new];
+    request.facebookAppId = @"...";
+    request.facebookPermissions = @[ @"email" ];
+    [request requestAccessWithSuccess:^(ACAccount * acc) {
+        // Whooray!
+    } failure:^(NSError *error) {
+        if (![error.domain isEqualToString:SACStoreErrorDomain]) {
+            // Oh no! Unknown error!
+        }
+    }];
 
 ## Requirements
 
@@ -18,9 +31,9 @@ it simply add the following line to your Podfile:
 
 ## Author
 
-, 
+Eduardo Costa <sac@tpk.com.br>
 
 ## License
 
-SimplifiedACAccounts is available under the MIT license. See the LICENSE file for more info.
+SimplifiedACAccounts is available under the LGPLv3 license. See the LICENSE file for more info.
 
