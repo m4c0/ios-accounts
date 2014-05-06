@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  SimplifiedACAccounts: 6922a5aeaefcc4dae9023d827448676fd3a215ed
+  SimplifiedACAccounts: 65e5c14640c5f5e8466c707bde1d4f83c90be1ec
 
 COCOAPODS: 0.32.1

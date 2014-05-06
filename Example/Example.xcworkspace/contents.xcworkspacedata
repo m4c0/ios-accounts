@@ -4,10 +4,6 @@
    <Group
       location = "container:"
       name = "Pod Stuff">
-      <Group
-         location = "group:../Assets"
-         name = "Assets">
-      </Group>
       <FileRef
          location = "group:../CHANGELOG.md">
       </FileRef>

@@ -8,22 +8,38 @@
 
 #import "SAEViewController.h"
 
-@interface SAEViewController ()
+#import <SACFacebookAccountRequest.h>
 
+@interface SAEViewController ()
+@property (nonatomic, weak) IBOutlet UIButton * login;
+@property (nonatomic, weak) IBOutlet UIButton * logout;
+@property (nonatomic, weak) IBOutlet UILabel * label;
 @end
 
 @implementation SAEViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+- (IBAction)login:(id)sender {
+    self.login.hidden = YES;
+    
+    SACFacebookAccountRequest * request = [SACFacebookAccountRequest new];
+    request.facebookAppId = @"477322999042033";
+    request.facebookPermissions = @[ @"email" ];
+    [request requestAccessWithCompletion:^(BOOL granted, NSError *error) {
+        if (granted) {
+            self.label.hidden = YES;
+            self.login.hidden = YES;
+            self.logout.hidden = NO;
+        } else {
+            self.label.text = [error description];
+            self.label.hidden = NO;
+            self.login.hidden = NO;
+            self.logout.hidden = YES;
+        }
+    }];
 }
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)logout:(id)sender {
+    self.login.hidden = NO;
+    self.logout.hidden = YES;
 }
 
 @end
