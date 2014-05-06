@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface SACAccountRequest : NSObject
-- (void)requestAccessWithCompletion:(void(^)(BOOL granted, NSError * error))completion;
+- (void)requestAccessWithSuccess:(void(^)())success failure:(void(^)(NSError * error))failure;
 @end
 
 
