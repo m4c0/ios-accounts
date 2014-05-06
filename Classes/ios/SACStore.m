@@ -11,6 +11,8 @@
 @import Accounts;
 @import Social;
 
+NSString * const SACStoreErrorDomain = @"com.github.simplified-ac-accounts";
+
 @implementation SACStore {
     ACAccountStore * accountStore;
 }
@@ -37,24 +39,33 @@
 
 - (void)requestAccessToAccountsWithType:(NSString *)accountType options:(NSDictionary *)options success:(void (^)(ACAccount *))success failure:(void (^)(NSError *))failure {
     void (^completion)(BOOL, NSError *) = ^(BOOL granted, NSError * error){
-        if (granted) {
-            return success(accountStore.accounts[0]);
-        }
-        
-        if ([self treatIfCommonError:error]) {
-            return failure(nil);
-        }
-        if (failure) {
-            failure(error);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (granted) {
+                return success(accountStore.accounts[0]);
+            }
+
+            [self treatCommonErrorFrom:error fallback:failure];
+        });
     };
     
     ACAccountType * type = [accountStore accountTypeWithAccountTypeIdentifier:accountType];
     [accountStore requestAccessToAccountsWithType:type options:options completion:completion];
 }
-- (BOOL)treatIfCommonError:(NSError *)error {
-    if (error.domain != ACErrorDomain) {
-        return NO;
+
+- (void)treatCommonErrorFrom:(NSError *)error fallback:(void (^)(NSError *))failure {
+    NSError * ourError = [NSError errorWithDomain:SACStoreErrorDomain code:0 userInfo:@{ NSUnderlyingErrorKey : error }];
+    
+    if (!error) {
+        [[[UIAlertView alloc] initWithTitle:nil
+                                    message:NSLocalizedString(@"Access to account was previously denied. You can change it at Settings.", @"Alert text to show when denied the access to the account")
+                                   delegate:nil
+                          cancelButtonTitle:NSLocalizedString(@"OK", @"Button of the alert to show when denied the access to the account")
+                          otherButtonTitles:nil] show];
+        return failure(ourError);
+    }
+    
+    if (![error.domain isEqualToString:ACErrorDomain]) {
+        return failure(error);
     }
     
     switch (error.code) {
@@ -64,15 +75,22 @@
             SLComposeViewController * vc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
             UIViewController * root = [UIApplication sharedApplication].keyWindow.rootViewController;
             [root presentViewController:vc animated:NO completion:^{
-                [vc dismissViewControllerAnimated:YES completion:nil];
+                [vc dismissViewControllerAnimated:NO completion:^{
+                    return failure(ourError);
+                }];
             }];
             [CATransaction commit];
-            
-            return YES;
+            break;
+        }
+        default: {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:error.userInfo[NSLocalizedDescriptionKey] ?: NSLocalizedString(@"Could not access account. (Error %d)", @"Alert text to show when an unknown error happens while retrieving social account")
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"OK", @"Button from alert to show when an unknown error happens while retrieving social account")
+                              otherButtonTitles:nil] show];
+            return failure(ourError);
         }
     }
-    
-    return NO;
 }
 
 @end

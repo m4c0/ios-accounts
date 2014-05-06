@@ -10,6 +10,8 @@
 
 @class ACAccount;
 
+extern NSString * const SACStoreErrorDomain;
+
 /** Facade for ACAccountStore */
 @interface SACStore : NSObject
 
