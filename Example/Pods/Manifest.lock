@@ -1,0 +1,14 @@
+PODS:
+  - SimplifiedACAccounts (0.1.0)
+
+DEPENDENCIES:
+  - SimplifiedACAccounts (from `../`)
+
+EXTERNAL SOURCES:
+  SimplifiedACAccounts:
+    :path: ../
+
+SPEC CHECKSUMS:
+  SimplifiedACAccounts: 6922a5aeaefcc4dae9023d827448676fd3a215ed
+
+COCOAPODS: 0.32.1
