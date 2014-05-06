@@ -3,10 +3,10 @@ Pod::Spec.new do |s|
   s.version          = "0.1.0"
   s.summary          = "Simplifies the usage of ACAccounts by treating the most common scenarios and errors."
   s.description      = <<-DESC
-                       An optional longer description of SimplifiedACAccounts
+                       Instead of having to use three classes to use the Accounts framework, you only need to use one!
 
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       * Simple interface to ACAccounts
+                       * Treats some of most common errors (example: user without account on his phone)
                        DESC
   s.homepage         = "https://github.com/m4c0/ios-accounts"
   s.license          = 'LGPLv3'
@@ -18,5 +18,4 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'Classes/ios'
-  s.resources = 'Assets/*.png'
 end
