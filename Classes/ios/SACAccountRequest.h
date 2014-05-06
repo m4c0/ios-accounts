@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class ACAccount;
+
 @interface SACAccountRequest : NSObject
-- (void)requestAccessWithSuccess:(void(^)())success failure:(void(^)(NSError * error))failure;
+- (void)requestAccessWithSuccess:(void(^)(ACAccount *))success failure:(void(^)(NSError *))failure;
 @end
 
 

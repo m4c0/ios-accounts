@@ -8,6 +8,8 @@
 
 #import "SACStore.h"
 
+@import Accounts;
+
 @implementation SACStore {
     ACAccountStore * accountStore;
 }
@@ -32,7 +34,16 @@
     return self;
 }
 
-- (void)requestAccessToAccountsWithType:(NSString *)accountType options:(NSDictionary *)options completion:(ACAccountStoreRequestAccessCompletionHandler)completion {
+- (void)requestAccessToAccountsWithType:(NSString *)accountType options:(NSDictionary *)options success:(void (^)(ACAccount *))success failure:(void (^)(NSError *))failure {
+    void (^completion)(BOOL, NSError *) = ^(BOOL granted, NSError * error){
+        if (granted) {
+            success(accountStore.accounts[0]);
+        } else if (failure) {
+            failure(error);
+        } else {
+        }
+    };
+    
     ACAccountType * type = [accountStore accountTypeWithAccountTypeIdentifier:accountType];
     [accountStore requestAccessToAccountsWithType:type options:options completion:completion];
 }

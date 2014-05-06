@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@import Accounts;
+@class ACAccount;
 
 /** Facade for ACAccountStore */
 @interface SACStore : NSObject
@@ -17,6 +17,7 @@
 
 - (void)requestAccessToAccountsWithType:(NSString *)accountType
                                 options:(NSDictionary *)options
-                             completion:(ACAccountStoreRequestAccessCompletionHandler)completion;
+                                success:(void(^)(ACAccount *))success
+                                failure:(void(^)(NSError *))failure;
 
 @end

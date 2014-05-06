@@ -12,18 +12,11 @@
 
 @implementation SACAccountRequest
 
-- (void)requestAccessWithSuccess:(void (^)())success failure:(void (^)(NSError *))failure {
-    void (^completion)(BOOL, NSError *) = ^(BOOL granted, NSError * error){
-        if (granted) {
-            success();
-        } else {
-            failure(error);
-        }
-    };
-    
+- (void)requestAccessWithSuccess:(void (^)(ACAccount *))success failure:(void (^)(NSError *))failure {
     [[SACStore sharedInstance] requestAccessToAccountsWithType:[self accountType]
                                                        options:[self options]
-                                                    completion:completion];
+                                                       success:success
+                                                       failure:failure];
 }
 
 @end
