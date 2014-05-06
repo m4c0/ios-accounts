@@ -8,6 +8,8 @@
 
 #import "SAEViewController.h"
 
+@import Accounts;
+
 #import <SACFacebookAccountRequest.h>
 
 @interface SAEViewController ()
@@ -24,8 +26,9 @@
     SACFacebookAccountRequest * request = [SACFacebookAccountRequest new];
     request.facebookAppId = @"477322999042033";
     request.facebookPermissions = @[ @"email" ];
-    [request requestAccessWithSuccess:^{
-        self.label.hidden = YES;
+    [request requestAccessWithSuccess:^(ACAccount * acc){
+        self.label.text = [acc description];
+        self.label.hidden = NO;
         self.login.hidden = YES;
         self.logout.hidden = NO;
     } failure:^(NSError *error) {
